@@ -15,17 +15,17 @@ namespace NCadSave.Infrastructure
 
         /// <summary>Чтение имеющихся настроек nanoCAD из реестра</summary>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public SaveSettings GetSaveSettings()
         {
             SaveSettings result = new SaveSettings();
             RegistryKey hkcu = Registry.CurrentUser;
 
-            using (RegistryKey hive = hkcu.OpenSubKey(_autosaveFolderHive)) {
+            using (RegistryKey hive = hkcu.OpenSubKey(_autosaveFolderHive))
+            {
                 result.AutosaveFolder = hive.GetValue(_autosaveFolderKey).ToString();
                 result.BackupFolder = hive.GetValue(_backupFolderKey).ToString();
 
-                byte[] timeout = (byte[]) hive.GetValue(_timeoutKey);
+                byte[] timeout = (byte[])hive.GetValue(_timeoutKey);
                 result.AutosaveTimeout = timeout[4];
 
                 byte[] createBak = (byte[])hive.GetValue(_createBakKey);
@@ -45,29 +45,78 @@ namespace NCadSave.Infrastructure
                 byte[] format = (byte[])hive.GetValue(_defaultFormatKey);
                 result.DefaultFormat = (DwgFormatForSave)format[4];
 
-                byte[] saveMode = (byte[]) hive.GetValue(_incSaveModeKey);
+                byte[] saveMode = (byte[])hive.GetValue(_incSaveModeKey);
                 result.IncSaveMode = (IncrementalSaveMode)saveMode[4];
 
                 byte[] useFormat = (byte[])hive.GetValue(_useSaveFormatKey);
                 result.UseDefaultFormat = (UseFormat)useFormat[4];
             }
 
-            throw new NotImplementedException();
+            return result;
         }
 
         /// <summary>Сохранение настроек nanoCAD</summary>
         /// <param name="settings"></param>
-        /// <exception cref="NotImplementedException"></exception>
         public void KeepSaveSettings(SaveSettings settings)
         {
-            throw new NotImplementedException ();
+            if (!string.IsNullOrEmpty(settings.AutosaveFolder) && !Directory.Exists(settings.AutosaveFolder))
+            {
+                Directory.CreateDirectory(settings.AutosaveFolder);
+            }
+            if (!string.IsNullOrEmpty(settings.BackupFolder) && !Directory.Exists(settings.BackupFolder))
+            {
+                Directory.CreateDirectory(settings.BackupFolder);
+            }
+            if (!string.IsNullOrEmpty(settings.HistoryFolder) && !Directory.Exists(settings.HistoryFolder))
+            {
+                Directory.CreateDirectory(settings.HistoryFolder);
+            }
+            #region Реестр
+            RegistryKey hkcu = Registry.CurrentUser
+            using (RegistryKey hive = hkcu.OpenSubKey(_autosaveFolderHive, true))
+            {
+                hive.SetValue(_autosaveFolderKey, settings.AutosaveFolder);
+                hive.SetValue(_backupFolderKey, settings.BackupFolder);
+                byte[] timeout = (byte[])hive.GetValue(_timeoutKey;
+                timeout[4] = settings.AutosaveTimeout;
+
+                hive.SetValue(_timeoutKey, timeout);
+                byte[] createBak = (byte[])hive.GetValue(_createBakKey);
+                createBak[4] = (byte)(settings.CreateBak ? 1 : 0);
+
+                hive.SetValue(_createBakKey, createBak);
+                byte[] createOrigBak = (byte[])hive.GetValue(_createOrigBakKey);
+                createOrigBak[4] = (byte)(settings.CreateOriginalBak ? 1 : 0);
+                hive.SetValue(_createOrigBakKey, createOrigBak);
+            }
+
+            using (RegistryKey hive = hkcu.OpenSubKey(_historyFolderKey, true))
+            {
+                hive.SetValue(_historyFolderHive, settings.HistoryFolder);
+            }
+
+            using (RegistryKey hive = hkcu.OpenSubKey(_saveProjectsHive, true))
+            {
+                byte[] format = (byte[]) hive.GetValue(_defaultFormatKey);
+                format[4]=(byte)settings.DefaultFormat;
+                hive.SetValue(_defaultFormatKey, format);
+
+                byte[] saveMode = (byte[])hive.GetValue(_incSaveModeKey);
+                saveMode[4] = (byte)settings.IncSaveMode;
+                hive.SetValue(_incSaveModeKey, saveMode);
+
+                byte[] useFormat = (byte[])hive.GetValue(_useSaveFormatKey);
+                useFormat[4] = (byte)settings.UseDefaultFormat;
+                hive.SetValue(_useSaveFormatKey, useFormat);
+            }
+            #endregion
         }
 
         /// <summary>Восстановить рекомендованные значения</summary>
         /// <exception cref="NotImplementedException"></exception>
         public void ResetToRecommendedSaveSettings()
         {
-            throw new NotImplementedException ();
+            throw new NotImplementedException();
         }
 
         public string RegistryHiveName { get; }

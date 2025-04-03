@@ -112,11 +112,29 @@ namespace NCadSave.Infrastructure
             #endregion
         }
 
+        /// <summary>Рекомендованные значения</summary>
+        /// <returns></returns>
+        public SaveSettings GetRecommendedSaveSettings()
+        {
+            return new SaveSettings()
+            {
+                AutosaveTimeout = 20,
+                AutosaveFolder = Path.Combine(_customFolder, "Autosave"),
+                BackupFolder = Path.Combine(_customFolder, "Backups"),
+                CreateBak = true,
+                CreateOriginalBak = false,
+                DefaultFormat = DwgFormatForSave.Dwg2013,
+                HistoryFolder = Path.Combine("History"),
+                IncSaveMode = IncrementalSaveMode.Off,
+                UseDefaultFormat = UseFormat.AllDocuments
+            };
+        }
+
         /// <summary>Восстановить рекомендованные значения</summary>
-        /// <exception cref="NotImplementedException"></exception>
         public void ResetToRecommendedSaveSettings()
         {
-            throw new NotImplementedException();
+            SaveSettings settings = GetRecommendedSaveSettings();
+            KeepSaveSettings(settings);
         }
 
         public string RegistryHiveName { get; }
@@ -134,5 +152,6 @@ namespace NCadSave.Infrastructure
         private string _timeoutKey = "TimeOut";
         private string _createBakKey = "createback";
         private string _createOrigBakKey = "createfistback";
+        private string _customFolder => Path.Combine(Environment.GetEnvironmentVariable("appdata"), "kpblc.NCadAutoSave");
     }
 }

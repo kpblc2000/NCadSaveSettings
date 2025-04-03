@@ -124,7 +124,7 @@ namespace NCadSave.Infrastructure
                 CreateBak = true,
                 CreateOriginalBak = false,
                 DefaultFormat = DwgFormatForSave.Dwg2013,
-                HistoryFolder = Path.Combine("History"),
+                HistoryFolder = Path.Combine(_customFolder, "History"),
                 IncSaveMode = IncrementalSaveMode.Off,
                 UseDefaultFormat = UseFormat.AllDocuments
             };

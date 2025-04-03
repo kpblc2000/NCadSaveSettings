@@ -13,6 +13,8 @@ namespace NCadSave.Infrastructure
         public UseFormat UseDefaultFormat { get; set; }
         /// <summary>Каталог автосохранения</summary>
         public string AutosaveFolder { get; set; }
+        /// <summary>Каталог резервных копий</summary>
+        public string BackupFolder { get; set; }
         /// <summary>Каталог с файлами историй</summary>
         public string HistoryFolder { get; set; }
         /// <summary>Время автосохранения</summary>
@@ -21,6 +23,5 @@ namespace NCadSave.Infrastructure
         public bool CreateBak { get; set; }
         /// <summary>Создавать bak оригинала</summary>
         public bool CreateOriginalBak { get; set; }
-
     }
 }

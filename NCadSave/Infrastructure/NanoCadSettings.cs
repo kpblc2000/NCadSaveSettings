@@ -72,12 +72,12 @@ namespace NCadSave.Infrastructure
                 Directory.CreateDirectory(settings.HistoryFolder);
             }
             #region Реестр
-            RegistryKey hkcu = Registry.CurrentUser
+            RegistryKey hkcu = Registry.CurrentUser;
             using (RegistryKey hive = hkcu.OpenSubKey(_autosaveFolderHive, true))
             {
                 hive.SetValue(_autosaveFolderKey, settings.AutosaveFolder);
                 hive.SetValue(_backupFolderKey, settings.BackupFolder);
-                byte[] timeout = (byte[])hive.GetValue(_timeoutKey;
+                byte[] timeout = (byte[])hive.GetValue(_timeoutKey);
                 timeout[4] = settings.AutosaveTimeout;
 
                 hive.SetValue(_timeoutKey, timeout);
@@ -90,9 +90,9 @@ namespace NCadSave.Infrastructure
                 hive.SetValue(_createOrigBakKey, createOrigBak);
             }
 
-            using (RegistryKey hive = hkcu.OpenSubKey(_historyFolderKey, true))
+            using (RegistryKey hive = hkcu.OpenSubKey(_historyFolderHive, true))
             {
-                hive.SetValue(_historyFolderHive, settings.HistoryFolder);
+                hive.SetValue(_historyFolderKey, settings.HistoryFolder);
             }
 
             using (RegistryKey hive = hkcu.OpenSubKey(_saveProjectsHive, true))

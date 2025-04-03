@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "nCad23.0": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files\\Nanosoft\\nanoCAD x64 23.0\\nCad.exe",
+      "commandLineArgs": "-g $(TargetPath)"
+    }
+  }
+}

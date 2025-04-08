@@ -10,6 +10,6 @@ namespace NCadSave.Infrastructure.Enums
         [Description("Для новых документов")]
         NewDocuments = 1,
         [Description("Для всех документов")]
-        AllDocuments = 2,
+        AllDocuments = 3,
     }
 }
